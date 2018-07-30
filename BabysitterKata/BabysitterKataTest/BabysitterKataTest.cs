@@ -16,7 +16,7 @@ namespace BabysitterKataTest
         public void ShouldReturnCorrectTotal()
         {
             Babysitter babysitter = new Babysitter();
-            Assert.Equal(36.0, babysitter.CalculateTotal(new TimeSpan(17, 0, 0), new TimeSpan(2, 0, 0)));
+            Assert.Equal(36.0, babysitter.CalculateTotal(new TimeSpan(17, 0, 0), new TimeSpan(20, 0, 0)));
         }
     }
 }
