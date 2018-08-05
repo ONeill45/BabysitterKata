@@ -28,16 +28,41 @@ namespace BabysitterKata.Models
         }
         #endregion
         #region methods 
+        public string Babysit(TimeSpan start, TimeSpan end, TimeSpan bedtime)
+        {
+            if(ValidateStartAndEnd(start, end))
+            {
+                StartTime = start;
+                EndTime = end;
+                if (ValidateBedTime(bedtime))
+                {
+                    BedTime = bedtime;
+                    return "Awesome!";
+                }
+                else
+                {
+                    return "Are you sure about that bedtime?";
+                }
+
+            }
+            else
+            {
+                return "I'm sorry, that doesn't work. I can babysit between "
+                    + DateTime.Today.Add(EarliestStart).ToString("hh:mm tt")
+                    + " and "
+                    + DateTime.Today.Add(LatestEnd).ToString("hh:mm tt");
+            }
+        }
         public double CalculateHourlyRate(TimeSpan time)
         {
 
-            if (time > LatestEnd && time < EarliestStart)
-            {
-                return 0.0;
-            }
-            else if (time >= EarliestStart && time <= EndOfDay)
+            if (time >= EarliestStart && time < BedTime)
             {
                 return 12.0;
+            }
+            if (time >= BedTime && time <= EndOfDay)
+            {
+                return 8.0;
             }
             else if (time >= Midnight && time <= LatestEnd)
             {
@@ -46,11 +71,11 @@ namespace BabysitterKata.Models
             else
                 return 0.0;
         }
-        public double CalculateTotal(TimeSpan start, TimeSpan end)
+        public double CalculateTotal()
         {
             double total = 0.0;
-            TimeSpan hour = start;
-            while(hour >= start && hour < end)
+            TimeSpan hour = StartTime;
+            while(hour >= StartTime && hour < EndTime)
             {
                 total += CalculateHourlyRate(hour);
                 hour = hour.Add(new TimeSpan(1, 0, 0));
@@ -73,6 +98,9 @@ namespace BabysitterKata.Models
                     && (Midnight <= endTime && endTime <= EndOfDay);
             }
         }
-        
+        public bool ValidateBedTime(TimeSpan bedTime)
+        {
+            return (StartTime < bedTime && bedTime < EndOfDay);
+        }
     }
 }
