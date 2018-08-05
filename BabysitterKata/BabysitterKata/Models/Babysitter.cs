@@ -13,6 +13,9 @@ namespace BabysitterKata.Models
         public TimeSpan LatestEnd { get; set; }
         public static TimeSpan EndOfDay { get; set; }
         public static TimeSpan Midnight { get; set; }
+        public TimeSpan StartTime { get; set; }
+        public TimeSpan EndTime { get; set; }
+        public TimeSpan BedTime { get; set; }
         #endregion
         #region constructors
         public Babysitter(string name = "Bee")
@@ -24,7 +27,7 @@ namespace BabysitterKata.Models
             EndOfDay = new TimeSpan(23, 59, 0);
         }
         #endregion
-        #region methods
+        #region methods 
         public double CalculateHourlyRate(TimeSpan time)
         {
 
@@ -55,9 +58,21 @@ namespace BabysitterKata.Models
             return total;
         }
         #endregion
-        public bool ValidateStart(TimeSpan startTime)
+        public bool ValidateStartAndEnd(TimeSpan startTime, TimeSpan endTime)
         {
-            return (Midnight <= startTime && startTime <= LatestEnd) || (EarliestStart <= startTime && startTime <= EndOfDay);
+            if (startTime == endTime)
+                return false;
+            else if (startTime < endTime)
+            {
+                return (EarliestStart <= startTime && startTime <= EndOfDay)
+                    && (startTime < endTime && endTime <= EndOfDay);
+            }
+            else
+            {
+                return (EarliestStart <= startTime && startTime <= EndOfDay)
+                    && (Midnight <= endTime && endTime <= EndOfDay);
+            }
         }
+        
     }
 }
