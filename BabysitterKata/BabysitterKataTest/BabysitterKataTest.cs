@@ -21,10 +21,10 @@ namespace BabysitterKataTest
         [Fact]
         public void ShouldReturnCorrectTotal()
         {
-            BabysitterUnderTest.StartTime = new TimeSpan(17, 0, 0);
-            BabysitterUnderTest.EndTime = new TimeSpan(20, 0, 0);
-            BabysitterUnderTest.BedTime = new TimeSpan(19, 0, 0);
-            Assert.Equal(32.0, BabysitterUnderTest.CalculateTotal());
+            BabysitterUnderTest.StartTime = new TimeSpan(18, 0, 0);
+            BabysitterUnderTest.EndTime = new TimeSpan(3, 0, 0);
+            BabysitterUnderTest.BedTime = new TimeSpan(21, 0, 0);
+            Assert.Equal(108.0, BabysitterUnderTest.CalculateTotal());
         }
         [Fact]
         public void ShouldValidateStartAndEnd()
@@ -37,7 +37,8 @@ namespace BabysitterKataTest
         public void ShouldReturnCorrectMessage()
         {
             Babysitter babysitter = new Babysitter();
-
+            string message = babysitter.Babysit(new TimeSpan(18, 0, 0), new TimeSpan(3, 0, 0), new TimeSpan(21, 0, 0));
+            Assert.Equal("Sure I can babysit from 06:00 PM to 03:00 AM. That will be $108", message);
         }
         [Fact]
         public void ShouldValidateBedTime()

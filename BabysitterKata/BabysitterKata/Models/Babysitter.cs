@@ -37,7 +37,11 @@ namespace BabysitterKata.Models
                 if (ValidateBedTime(bedtime))
                 {
                     BedTime = bedtime;
-                    return "Awesome!";
+                    double total = CalculateTotal();
+                    return "Sure I can babysit from " 
+                        + DateTime.Today.Add(StartTime).ToString("hh:mm tt") + " to " 
+                        + DateTime.Today.Add(EndTime).ToString("hh:mm tt") 
+                        + ". That will be $" + total;
                 }
                 else
                 {
@@ -74,11 +78,11 @@ namespace BabysitterKata.Models
         public double CalculateTotal()
         {
             double total = 0.0;
-            TimeSpan hour = StartTime;
-            while(hour >= StartTime && hour < EndTime)
+            TimeSpan hour = DateTime.Today.Add(StartTime).TimeOfDay;
+            while(hour != EndTime)
             {
                 total += CalculateHourlyRate(hour);
-                hour = hour.Add(new TimeSpan(1, 0, 0));
+                hour = DateTime.Today.Add(hour).AddHours(1).TimeOfDay;
             }
             return total;
         }
