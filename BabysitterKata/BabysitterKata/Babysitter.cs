@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace BabysitterKata.Models
+namespace BabysitterKata
 {
     public class Babysitter
     {
@@ -16,6 +13,7 @@ namespace BabysitterKata.Models
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
         public TimeSpan BedTime { get; set; }
+        public double Total { get; set; }
         #endregion
         #region constructors
         public Babysitter(string name = "Bee")
@@ -37,11 +35,11 @@ namespace BabysitterKata.Models
                 if (ValidateBedTime(bedtime))
                 {
                     BedTime = bedtime;
-                    double total = CalculateTotal();
+                    Total = CalculateTotal();
                     return "Sure I can babysit from "
                         + DateTime.Today.Add(StartTime).ToString("hh:mm tt") + " to "
                         + DateTime.Today.Add(EndTime).ToString("hh:mm tt")
-                        + ". That will be $" + total;
+                        + ". That will be $" + Total;
                 }
                 else
                 {
