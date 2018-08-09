@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BabysitterKata.Models
+
+namespace BabysitterKata
 {
     public class Babysitter
     {
