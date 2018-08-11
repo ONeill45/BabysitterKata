@@ -30,16 +30,19 @@ namespace BabysitterKataTest
             Assert.Equal(52.0, BabysitterUnderTest.CalculateTotal());
         }
         [Fact]
-        public void ShouldValidateStartOrEnd()
+        public void ShouldValidateTimeByType()
         {
-            Assert.True(BabysitterUnderTest.ValidateStartAndEnd(DateTime.Parse("5:00 PM").TimeOfDay, BabysitterUnderTest.Times.Start));
-            Assert.True(BabysitterUnderTest.ValidateStartAndEnd(DateTime.Parse("4:00 AM").TimeOfDay, BabysitterUnderTest.Times.End));
-            Assert.True(BabysitterUnderTest.ValidateStartAndEnd(DateTime.Parse("9:00 PM").TimeOfDay, BabysitterUnderTest.Times.Bedtime));
+            BabysitterUnderTest.StartTime = DateTime.Parse("5:00 PM").TimeOfDay;
+            BabysitterUnderTest.EndTime = DateTime.Parse("4:00 AM").TimeOfDay;
+            BabysitterUnderTest.BedTime = DateTime.Parse("9:00 PM").TimeOfDay;
+            Assert.True(BabysitterUnderTest.ValidateTimeByType(BabysitterUnderTest.StartTime, Babysitter.Times.Start));
+            Assert.True(BabysitterUnderTest.ValidateTimeByType(BabysitterUnderTest.EndTime, Babysitter.Times.End));
+            Assert.True(BabysitterUnderTest.ValidateTimeByType(BabysitterUnderTest.BedTime, Babysitter.Times.Bedtime));
 
-            Assert.False(BabysitterUnderTest.ValidateStartAndEnd(DateTime.Parse("4:00 PM").TimeOfDay, BabysitterUnderTest.Times.Start));
-            Assert.False(BabysitterUnderTest.ValidateStartAndEnd(DateTime.Parse("5:00 AM").TimeOfDay, BabysitterUnderTest.Times.End));
+            Assert.False(BabysitterUnderTest.ValidateTimeByType(DateTime.Parse("4:00 PM").TimeOfDay, Babysitter.Times.Start));
+            Assert.False(BabysitterUnderTest.ValidateTimeByType(DateTime.Parse("5:00 AM").TimeOfDay, Babysitter.Times.End));
             BabysitterUnderTest.StartTime = DateTime.Parse("10:00 PM").TimeOfDay;
-            Assert.False(BabysitterUnderTest.ValidateStartAndEnd(DateTime.Parse("9:00 PM").TimeOfDay, BabysitterUnderTest.Times.Bedtime));
+            Assert.False(BabysitterUnderTest.ValidateTimeByType(DateTime.Parse("9:00 PM").TimeOfDay, Babysitter.Times.Bedtime));
         }
         [Fact]
         public void ShouldReturnCorrectMessage()
@@ -47,12 +50,6 @@ namespace BabysitterKataTest
             Babysitter babysitter = new Babysitter();
             string message = babysitter.Babysit(new TimeSpan(18, 0, 0), new TimeSpan(3, 0, 0), new TimeSpan(21, 0, 0));
             Assert.Equal("Sure I can babysit from 06:00 PM to 03:00 AM. That will be $108", message);
-        }
-        [Fact]
-        public void ShouldValidateBedTime()
-        {
-            BabysitterUnderTest.StartTime = new TimeSpan(17, 0, 0);
-            Assert.True(BabysitterUnderTest.ValidateBedTime(new TimeSpan(21, 0, 0)));
         }
         [Fact]
         public void ShouldValidateInputIsATime()

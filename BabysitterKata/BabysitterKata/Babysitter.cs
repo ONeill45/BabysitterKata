@@ -5,6 +5,12 @@ namespace BabysitterKata
     public class Babysitter
     {
         #region properties
+        public enum Times
+        {
+            Start,
+            End,
+            Bedtime
+        }
         public string Name { get; set; }
         public TimeSpan EarliestStart { get; set; }
         public TimeSpan LatestEnd { get; set; }
@@ -31,34 +37,24 @@ namespace BabysitterKata
             DateTime parsed = new DateTime();
             return DateTime.TryParse(time, out parsed);
         }
+        public string Babysit()
+        {
+            Total = CalculateTotal();
+            return "Sure I can babysit from "
+                + DateTime.Today.Add(StartTime).ToString("hh:mm tt") + " to "
+                + DateTime.Today.Add(EndTime).ToString("hh:mm tt")
+                + ". That will be $" + Total;
+        }
         public string Babysit(TimeSpan start, TimeSpan end, TimeSpan bedtime)
         {
-            if (ValidateStartAndEnd(start, end))
-            {
-                StartTime = start;
-                EndTime = end;
-                if (ValidateBedTime(bedtime))
-                {
-                    BedTime = bedtime;
-                    Total = CalculateTotal();
-                    return "Sure I can babysit from "
-                        + DateTime.Today.Add(StartTime).ToString("hh:mm tt") + " to "
-                        + DateTime.Today.Add(EndTime).ToString("hh:mm tt")
-                        + ". That will be $" + Total;
-                }
-                else
-                {
-                    return "Are you sure about that bedtime?";
-                }
-
-            }
-            else
-            {
-                return "I'm sorry, that doesn't work. I can babysit between "
-                    + DateTime.Today.Add(EarliestStart).ToString("hh:mm tt")
-                    + " and "
-                    + DateTime.Today.Add(LatestEnd).ToString("hh:mm tt");
-            }
+            StartTime = start;
+            EndTime = end;
+            BedTime = bedtime;
+            Total = CalculateTotal();
+            return "Sure I can babysit from "
+                + DateTime.Today.Add(StartTime).ToString("hh:mm tt") + " to "
+                + DateTime.Today.Add(EndTime).ToString("hh:mm tt")
+                + ". That will be $" + Total;
         }
         public double CalculateHourlyRate(TimeSpan time)
         {
@@ -90,19 +86,26 @@ namespace BabysitterKata
             return total;
         }
         #endregion
-        public bool ValidateStartAndEnd(TimeSpan startTime, TimeSpan endTime)
+        public bool ValidateTimeByType(TimeSpan time, Times typeOfTime)
         {
-            if (startTime == endTime)
-                return false;
-            else if (startTime < endTime)
+            switch (typeOfTime)
             {
-                return (EarliestStart <= startTime && startTime <= EndOfDay)
-                    && (startTime < endTime && endTime <= EndOfDay);
-            }
-            else
-            {
-                return (EarliestStart <= startTime && startTime <= EndOfDay)
-                    && (Midnight <= endTime && endTime <= EndOfDay);
+                case Times.Start:
+                {
+                    return (EarliestStart <= time && time <= EndOfDay);
+                }
+                case Times.End:
+                {
+                    return (StartTime < time && time <= EndOfDay)
+                        || (Midnight <= time && time <= LatestEnd);
+                }
+                case Times.Bedtime:
+                {
+                    return (StartTime < time && time <= EndOfDay)
+                        || (Midnight <= time && time <= EndTime);
+                }
+                default:
+                    return false;
             }
         }
         public bool ValidateBedTime(TimeSpan bedTime)
