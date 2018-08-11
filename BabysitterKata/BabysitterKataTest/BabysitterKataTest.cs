@@ -30,11 +30,16 @@ namespace BabysitterKataTest
             Assert.Equal(52.0, BabysitterUnderTest.CalculateTotal());
         }
         [Fact]
-        public void ShouldValidateStartAndEnd()
+        public void ShouldValidateStartOrEnd()
         {
-            Assert.True(BabysitterUnderTest.ValidateStartAndEnd(DateTime.Parse("5:00 PM").TimeOfDay, DateTime.Parse("10:00 PM").TimeOfDay));
-            Assert.False(BabysitterUnderTest.ValidateStartAndEnd(DateTime.Parse("5:00 PM").TimeOfDay, DateTime.Parse("5:00 PM").TimeOfDay));
-            Assert.True(BabysitterUnderTest.ValidateStartAndEnd(DateTime.Parse("5:00 PM").TimeOfDay, DateTime.Parse("2:00 AM").TimeOfDay));
+            Assert.True(BabysitterUnderTest.ValidateStartAndEnd(DateTime.Parse("5:00 PM").TimeOfDay, BabysitterUnderTest.Times.Start));
+            Assert.True(BabysitterUnderTest.ValidateStartAndEnd(DateTime.Parse("4:00 AM").TimeOfDay, BabysitterUnderTest.Times.End));
+            Assert.True(BabysitterUnderTest.ValidateStartAndEnd(DateTime.Parse("9:00 PM").TimeOfDay, BabysitterUnderTest.Times.Bedtime));
+
+            Assert.False(BabysitterUnderTest.ValidateStartAndEnd(DateTime.Parse("4:00 PM").TimeOfDay, BabysitterUnderTest.Times.Start));
+            Assert.False(BabysitterUnderTest.ValidateStartAndEnd(DateTime.Parse("5:00 AM").TimeOfDay, BabysitterUnderTest.Times.End));
+            BabysitterUnderTest.StartTime = DateTime.Parse("10:00 PM").TimeOfDay;
+            Assert.False(BabysitterUnderTest.ValidateStartAndEnd(DateTime.Parse("9:00 PM").TimeOfDay, BabysitterUnderTest.Times.Bedtime));
         }
         [Fact]
         public void ShouldReturnCorrectMessage()
