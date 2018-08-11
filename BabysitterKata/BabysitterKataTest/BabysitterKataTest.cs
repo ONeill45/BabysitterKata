@@ -28,6 +28,11 @@ namespace BabysitterKataTest
             BabysitterUnderTest.EndTime = new TimeSpan(2, 0, 0);
             BabysitterUnderTest.BedTime = new TimeSpan(23, 0, 0);
             Assert.Equal(52.0, BabysitterUnderTest.CalculateTotal());
+
+            BabysitterUnderTest.StartTime = new TimeSpan(22, 15, 0);
+            BabysitterUnderTest.EndTime = new TimeSpan(2, 30, 0);
+            BabysitterUnderTest.BedTime = new TimeSpan(23, 0, 0);
+            Assert.Equal(68.0, BabysitterUnderTest.CalculateTotal());
         }
         [Fact]
         public void ShouldValidateTimeByType()
@@ -47,8 +52,7 @@ namespace BabysitterKataTest
         [Fact]
         public void ShouldReturnCorrectMessage()
         {
-            Babysitter babysitter = new Babysitter();
-            string message = babysitter.Babysit(new TimeSpan(18, 0, 0), new TimeSpan(3, 0, 0), new TimeSpan(21, 0, 0));
+            string message = BabysitterUnderTest.Babysit(new TimeSpan(18, 0, 0), new TimeSpan(3, 0, 0), new TimeSpan(21, 0, 0));
             Assert.Equal("Sure I can babysit from 06:00 PM to 03:00 AM. That will be $108", message);
         }
         [Fact]
@@ -58,6 +62,22 @@ namespace BabysitterKataTest
             Assert.True(BabysitterUnderTest.IsAValidTime(time));
             string notATime = "aldjgkql;g";
             Assert.False(BabysitterUnderTest.IsAValidTime(notATime));
+        }
+        [Fact]
+        public void ShouldReturnHoursOnly()
+        {
+            TimeSpan time = new TimeSpan(17, 30, 0);
+            Assert.Equal(new TimeSpan(17, 0, 0), BabysitterUnderTest.TruncateMinutes(time));
+            TimeSpan newTime = new TimeSpan(17, 0, 0);
+            Assert.Equal(new TimeSpan(17, 0, 0), BabysitterUnderTest.TruncateMinutes(newTime));
+        }
+        [Fact]
+        public void ShouldReturnCorrectEndTimeForCalculation()
+        {
+            BabysitterUnderTest.EndTime = new TimeSpan(2, 0, 0);
+            Assert.Equal(new TimeSpan(2, 0, 0), BabysitterUnderTest.MakeEndFullHour());
+            BabysitterUnderTest.EndTime = new TimeSpan(2, 30, 0);
+            Assert.Equal(new TimeSpan(3, 0, 0), BabysitterUnderTest.MakeEndFullHour());
         }
     }
 }

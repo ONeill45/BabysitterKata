@@ -37,6 +37,7 @@ namespace BabysitterKata
             DateTime parsed = new DateTime();
             return DateTime.TryParse(time, out parsed);
         }
+        //method to calculate total and return message 
         public string Babysit()
         {
             Total = CalculateTotal();
@@ -45,6 +46,7 @@ namespace BabysitterKata
                 + DateTime.Today.Add(EndTime).ToString("hh:mm tt")
                 + ". That will be $" + Total;
         }
+        //overload babysit method to pass in start, end and bedtime values and setting properties
         public string Babysit(TimeSpan start, TimeSpan end, TimeSpan bedtime)
         {
             StartTime = start;
@@ -56,6 +58,7 @@ namespace BabysitterKata
                 + DateTime.Today.Add(EndTime).ToString("hh:mm tt")
                 + ". That will be $" + Total;
         }
+        //calculate how much babystiter would earn each hour
         public double CalculateHourlyRate(TimeSpan time)
         {
 
@@ -74,43 +77,59 @@ namespace BabysitterKata
             else
                 return 0.0;
         }
+        //calculate total amount owed
         public double CalculateTotal()
         {
             double total = 0.0;
-            TimeSpan hour = DateTime.Today.Add(StartTime).TimeOfDay;
-            while (hour != EndTime)
+            TimeSpan hour = TruncateMinutes(StartTime);
+            TimeSpan endForCalc = MakeEndFullHour();
+            while (hour != endForCalc)
             {
                 total += CalculateHourlyRate(hour);
                 hour = DateTime.Today.Add(hour).AddHours(1).TimeOfDay;
             }
             return total;
         }
-        #endregion
+        //pass in time and type to ensure validity
+        //checks that start isn't too soon, end isn't too late, and bedtime is between them
         public bool ValidateTimeByType(TimeSpan time, Times typeOfTime)
         {
             switch (typeOfTime)
             {
                 case Times.Start:
-                {
-                    return (EarliestStart <= time && time <= EndOfDay);
-                }
+                    {
+                        return (EarliestStart <= time && time <= EndOfDay);
+                    }
                 case Times.End:
-                {
-                    return (StartTime < time && time <= EndOfDay)
-                        || (Midnight <= time && time <= LatestEnd);
-                }
+                    {
+                        return (StartTime < time && time <= EndOfDay)
+                            || (Midnight <= time && time <= LatestEnd);
+                    }
                 case Times.Bedtime:
-                {
-                    return (StartTime < time && time <= EndOfDay)
-                        || (Midnight <= time && time <= EndTime);
-                }
+                    {
+                        return (StartTime < time && time <= EndOfDay)
+                            || (Midnight <= time && time <= EndTime);
+                    }
                 default:
                     return false;
             }
         }
-        public bool ValidateBedTime(TimeSpan bedTime)
+        //truncate minutes off of start for calculating total
+        public TimeSpan TruncateMinutes(TimeSpan time)
         {
-            return (StartTime < bedTime && bedTime < EndOfDay);
+            return DateTime.Today.AddHours(time.Hours).TimeOfDay;
         }
+        //method to add to next hour for end time for calculating total
+        //since 2:30 would technically be the same as 3:00, we round up
+        public TimeSpan MakeEndFullHour()
+        {
+            if (EndTime.Minutes == 0)
+                return EndTime;
+            else
+                return DateTime.Today.AddHours(EndTime.Hours + 1).TimeOfDay;
+        }
+        #endregion
+
+
     }
 }
