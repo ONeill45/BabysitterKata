@@ -1,6 +1,6 @@
 using System;
 using Xunit;
-using BabysitterKata.Models;
+using BabysitterKata;
 
 namespace BabysitterKataTest
 {
