@@ -17,14 +17,17 @@ namespace BabysitterKataTest
             //bedtime must be defined to calculate hourly rate properly
             BabysitterUnderTest.BedTime = new TimeSpan(21, 0, 0);
             Assert.Equal(12.0, BabysitterUnderTest.CalculateHourlyRate(new TimeSpan(20, 0, 0)));
+            Assert.Equal(8.0, BabysitterUnderTest.CalculateHourlyRate(new TimeSpan(21, 0, 0)));
+            Assert.Equal(16.0, BabysitterUnderTest.CalculateHourlyRate(new TimeSpan(0, 0, 0)));
+            Assert.Equal(0.0, BabysitterUnderTest.CalculateHourlyRate(new TimeSpan(16, 0, 0)));
         }
         [Fact]
         public void ShouldReturnCorrectTotal()
         {
-            BabysitterUnderTest.StartTime = new TimeSpan(18, 0, 0);
-            BabysitterUnderTest.EndTime = new TimeSpan(3, 0, 0);
-            BabysitterUnderTest.BedTime = new TimeSpan(21, 0, 0);
-            Assert.Equal(108.0, BabysitterUnderTest.CalculateTotal());
+            BabysitterUnderTest.StartTime = new TimeSpan(22, 0, 0);
+            BabysitterUnderTest.EndTime = new TimeSpan(2, 0, 0);
+            BabysitterUnderTest.BedTime = new TimeSpan(23, 0, 0);
+            Assert.Equal(52.0, BabysitterUnderTest.CalculateTotal());
         }
         [Fact]
         public void ShouldValidateStartAndEnd()

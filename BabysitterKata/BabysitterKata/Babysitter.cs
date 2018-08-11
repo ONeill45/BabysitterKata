@@ -71,7 +71,7 @@ namespace BabysitterKata
             {
                 return 8.0;
             }
-            else if (time >= Midnight && time <= LatestEnd)
+            else if (time >= Midnight && time < LatestEnd)
             {
                 return 16.0;
             }
