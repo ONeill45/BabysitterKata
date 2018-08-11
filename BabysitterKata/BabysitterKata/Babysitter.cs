@@ -26,6 +26,11 @@ namespace BabysitterKata
         }
         #endregion
         #region methods 
+        public bool IsAValidTime(string time)
+        {
+            DateTime parsed = new DateTime();
+            return DateTime.TryParse(time, out parsed);
+        }
         public string Babysit(TimeSpan start, TimeSpan end, TimeSpan bedtime)
         {
             if (ValidateStartAndEnd(start, end))

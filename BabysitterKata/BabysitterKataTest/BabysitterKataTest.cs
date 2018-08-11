@@ -46,5 +46,13 @@ namespace BabysitterKataTest
             BabysitterUnderTest.StartTime = new TimeSpan(17, 0, 0);
             Assert.True(BabysitterUnderTest.ValidateBedTime(new TimeSpan(21, 0, 0)));
         }
+        [Fact]
+        public void ShouldValidateInputIsATime()
+        {
+            string time = "12:00 PM";
+            Assert.True(BabysitterUnderTest.IsAValidTime(time));
+            string notATime = "aldjgkql;g";
+            Assert.False(BabysitterUnderTest.IsAValidTime(notATime));
+        }
     }
 }
